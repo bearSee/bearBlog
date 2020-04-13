@@ -24,12 +24,18 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    mapbgColor: String,
   },
   data() {
     return {
       mapChart: {},
       earthChart: {},
     };
+  },
+  watch: {
+    mapbgColor() {
+      this.initEearth();
+    },
   },
   mounted() {
     this.initEearth();
@@ -40,6 +46,7 @@ export default {
         width: 3086,
         height: 3048,
       });
+      this.mapOptions.backgroundColor = this.mapbgColor || this.mapOptions.backgroundColor;
       // 获取容器并对其初始化
       this.earthChart = echarts.init(document.getElementById(this.id));
 
@@ -58,7 +65,7 @@ export default {
 <style>
   .earth{
     width: 100%;
-    height: 700px;
+    min-height: 700px;
     background: rgba(16, 167, 202, 0.39);
   }
 </style>

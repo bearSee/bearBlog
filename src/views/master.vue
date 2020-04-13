@@ -52,7 +52,7 @@
 </template>
 
 <script>
-// import { mapActions, mapState, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 import i18n from '@/mixins/i18n';
 import themeConfig from '@/utils/themeConfig';
 
@@ -86,6 +86,9 @@ export default {
     },
   },
   methods: {
+    ...mapMutations([
+      'setThemeColor',
+    ]),
     changeBackground(img) {
       this.currentBackground = img;
       window.localStorage.setItem('current-background', img);
@@ -93,6 +96,7 @@ export default {
     },
     changeTheme(val) {
       window.localStorage.setItem('theme-color', val);
+      this.setThemeColor(val);
       const componentStyle = document.createElement('style');
       componentStyle.innerText = `:root {--theme:${val}!important;}`;
       document.head.appendChild(componentStyle);

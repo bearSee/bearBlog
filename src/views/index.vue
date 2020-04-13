@@ -8,11 +8,12 @@
 <template>
   <div class="index">
     <!-- <div class="title animated infinite bounce delay-2s">熊二、熊二</div> -->
-    <my-earth ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions"></my-earth>
+    <my-earth ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions" :mapbgColor="mapbgColor"></my-earth>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import myEarth from '@/components/earth';
 
 const starfield = require('../assets/image/starfield.jpg');
@@ -24,7 +25,10 @@ export default {
     myEarth,
   },
   data() {
+    const mapbgColor = window.localStorage.getItem('theme-color');
+
     return {
+      mapbgColor,
       earthOptions: {
         globe: {
           globeRadius: 83,
@@ -118,7 +122,7 @@ export default {
         ],
       },
       mapOptions: {
-        backgroundColor: 'rgba(20,104,121,0.71)', // 当和立体球形贴图是海洋的颜色
+        backgroundColor: mapbgColor, // 当和立体球形贴图是海洋的颜色
         visualMap: {
           show: false,
           min: 0,
@@ -168,6 +172,16 @@ export default {
       this.earthOptions.series[0].data = this.earthOptions.series[0].data.concat(this.rodamData());
     }
   },
+  computed: {
+    ...mapState([
+      'themeColor',
+    ]),
+  },
+  watch: {
+    themeColor(val) {
+      this.mapbgColor = val;
+    },
+  },
   methods: {
     // 调用划线方法
     rodamData() {
@@ -196,6 +210,7 @@ export default {
 
 .index {
   min-height: 100%;
+  height: 100%;
   width: 100%;
   border-radius: 10px;
   background: rgba(250, 250, 250, .3);
@@ -204,6 +219,9 @@ export default {
     margin: auto;
     color: var(--theme);
     font-size: 40px;
+  }
+  #earth {
+    height: 100%;
   }
 }
 </style>
