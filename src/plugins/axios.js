@@ -9,8 +9,8 @@
 import Vue from 'vue';
 import axios from 'axios';
 import qs from 'qs';
-import { Message, MessageBox } from 'element-ui';
-import store from '@/store';
+import { Message } from 'element-ui';
+// import store from '@/store';
 
 const root = `${window.location.protocol}//${window.location.host}`;
 const config = {
@@ -46,9 +46,7 @@ _axios.interceptors.request.use(
 
 // Add a response interceptor
 _axios.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  response => response,
   (error) => {
     const response = error.response;
     const data = response.data;
