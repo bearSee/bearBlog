@@ -34,14 +34,14 @@ export default {
   },
   watch: {
     mapbgColor() {
-      this.initEearth();
+      this.resetEarth();
     },
   },
   mounted() {
-    this.initEearth();
+    this.initEarth();
   },
   methods: {
-    initEearth() {
+    initEarth() {
       this.mapChart = echarts.init(document.createElement('canvas'), null, {
         width: 3086,
         height: 3048,
@@ -57,6 +57,11 @@ export default {
       this.earthChart.setOption(this.earthOptions);
       // this.earthChart.setOption(this.mapOptions);// 平面展开图
     },
+    resetEarth() {
+      this.mapOptions.backgroundColor = this.mapbgColor || this.mapOptions.backgroundColor;
+      this.earthChart.setOption(this.earthOptions);
+      this.mapChart.setOption(this.mapOptions);
+    },
   },
 };
 
@@ -66,6 +71,5 @@ export default {
   .earth{
     width: 100%;
     min-height: 700px;
-    background: rgba(16, 167, 202, 0.39);
   }
 </style>

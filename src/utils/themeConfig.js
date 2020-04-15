@@ -32,12 +32,20 @@ export default {
       name: '落枫',
     },
     {
-      url: 'catcher-circle.jpg',
-      name: '麦圈',
+      url: 'catcher-circle-A.jpg',
+      name: '麦圈A',
+    },
+    {
+      url: 'catcher-circle-B.jpg',
+      name: '麦圈B',
     },
     {
       url: 'catcher-grain.jpg',
       name: '麦穗',
+    },
+    {
+      url: 'study-bg.jpg',
+      name: '数学',
     },
   ],
   currentBackground,

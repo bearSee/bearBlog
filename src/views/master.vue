@@ -68,7 +68,7 @@ export default {
   mixins: [i18n],
   data() {
     return {
-      cdn: `${window.location.protocol}//${window.location.host}${window.location.pathname}image/`,
+      cdn: `${window.location.protocol}//${window.location.host}/images/`,
       bgStyle: '',
       backgroundList,
       currentBackground: currentBackground || backgroundList[0].url,

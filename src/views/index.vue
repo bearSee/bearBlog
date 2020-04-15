@@ -17,7 +17,6 @@ import { mapState } from 'vuex';
 import myEarth from '@/components/earth';
 
 const starfield = require('../assets/image/starfield.jpg');
-const world = require('../assets/image/world.jpg');
 
 export default {
   name: 'index',
@@ -35,7 +34,7 @@ export default {
           baseTexture: '', // 贴图 球形和平面的吻合
           silent: true,
           environment: starfield, // 背景
-          heightTexture: world, // 地球的整个纹路
+          // heightTexture: starfield, // 地球的整个纹路
           shading: 'realistic',
           light: {
             main: {
@@ -122,7 +121,7 @@ export default {
         ],
       },
       mapOptions: {
-        backgroundColor: mapbgColor, // 当和立体球形贴图是海洋的颜色
+        backgroundColor: mapbgColor, // 立体球形贴图的颜色
         visualMap: {
           show: false,
           min: 0,
@@ -164,13 +163,8 @@ export default {
           },
         ],
       },
+      timer: null,
     };
-  },
-  created() {
-    // 随机划多条线
-    for (let i = 0; i < 150; i++) {
-      this.earthOptions.series[0].data = this.earthOptions.series[0].data.concat(this.rodamData());
-    }
   },
   computed: {
     ...mapState([
@@ -200,6 +194,25 @@ export default {
         value: (Math.random() * 3000).toFixed(2),
       };
     },
+    initEarth() {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.$refs.earth.mapChart.dispose();
+        this.$refs.earth.earthChart.dispose();
+        this.$refs.earth.initEarth();
+      }, 300);
+    },
+  },
+  created() {
+    // 划多条线
+    // eslint-disable-next-line
+    this.earthOptions.series[0].data = Array.apply(null, Array(150)).map(() => this.rodamData());
+  },
+  mounted() {
+    window.addEventListener('resize', this.initEarth);
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.initEarth);
   },
 };
 </script>
@@ -222,6 +235,7 @@ export default {
   }
   #earth {
     height: 100%;
+    width: 100%;
   }
 }
 </style>
