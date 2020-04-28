@@ -17,8 +17,18 @@ export default {
       },
       children: [
         {
+          name: 'index',
           path: '/index',
           component: () => import(/* webpackChunkName: "index" */ '@/views/index'),
+          meta: {
+            requirAuth: false,
+            keepAlive: true,
+          },
+        },
+        {
+          name: 'userCenter',
+          path: '/userCenter',
+          component: () => import(/* webpackChunkName: "userCenter" */ '@/views/userCenter/index'),
           meta: {
             requirAuth: false,
           },

@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     themeColor: window.localStorage.getItem('theme-color'),
+    cdn: `${window.location.protocol}//${window.location.host}/images/`,
   },
   mutations: {
     setThemeColor(state, payload) {

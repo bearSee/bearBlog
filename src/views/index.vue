@@ -7,8 +7,7 @@
  -->
 <template>
   <div class="index">
-    <!-- <div class="title animated infinite bounce delay-2s">熊二、熊二</div> -->
-    <my-earth ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions" :mapbgColor="mapbgColor"></my-earth>
+    <my-earth ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions" :mapbgColor="mapbgColor" @dblclick="handlerClick"></my-earth>
   </div>
 </template>
 
@@ -202,6 +201,14 @@ export default {
         this.$refs.earth.initEarth();
       }, 300);
     },
+    // test() {
+    //   this.$http.get('configData.json').then(({ data }) => {
+    //     console.log('tag', data);
+    //   });
+    // },
+    handlerClick(a, b) {
+      console.log('aabb', a, b);
+    },
   },
   created() {
     // 划多条线
@@ -218,21 +225,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/style.scss";
 @import "@/assets/scss/theme.scss";
 
 .index {
-  min-height: 100%;
-  height: 100%;
-  width: 100%;
-  border-radius: 10px;
-  background: rgba(250, 250, 250, .3);
-  display: flex;
-  .title {
-    margin: auto;
-    color: var(--theme);
-    font-size: 40px;
-  }
   #earth {
     height: 100%;
     width: 100%;

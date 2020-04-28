@@ -21,6 +21,38 @@
             </div>
           </el-popover>
         </div>
+        <el-menu
+          mode="horizontal"
+          router
+          background-color="#545c64"
+          text-color="#fff"
+          :active-text-color="color"
+          :default-active="menus && menus[0] && menus[0].path || null">
+          <template v-for="(menu, i) of menus">
+            <el-submenu
+              v-if="menu.children && menu.children.length"
+              :index="menu.name"
+              :key="i">
+              <template slot="title">
+                <i v-if="menu.icon" :class="menu.icon"></i>
+                <span>{{ menu.name }}</span>
+              </template>
+              <el-menu-item
+                v-for="child of menu.children"
+                :index="child.path"
+                :key="child.name">
+                {{ child.name }}
+              </el-menu-item>
+            </el-submenu>
+            <el-menu-item
+              v-else
+              :index="menu.path"
+              :key="i">
+              <i v-if="menu.icon" :class="menu.icon"></i>
+              <span>{{ menu.name }}</span>
+            </el-menu-item>
+          </template>
+        </el-menu>
         <div class="head-right">
           <!-- 背景图 -->
           <el-popover
@@ -42,7 +74,10 @@
         </div>
       </el-header>
       <el-main class="main-content">
-        <router-view class="animated bounceInUp delay-1s"></router-view>
+        <keep-alive>
+          <router-view class="animated bounceInUp delay-0.5s" v-if="$route.meta.keepAlive"></router-view>
+        </keep-alive>
+        <router-view class="animated bounceInUp delay-0.5s" v-if="!$route.meta.keepAlive"></router-view>
       </el-main>
     </el-container>
     <el-backtop target=".main-content">
@@ -52,7 +87,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import i18n from '@/mixins/i18n';
 import themeConfig from '@/utils/themeConfig';
 
@@ -68,13 +103,40 @@ export default {
   mixins: [i18n],
   data() {
     return {
-      cdn: `${window.location.protocol}//${window.location.host}/images/`,
       bgStyle: '',
       backgroundList,
       currentBackground: currentBackground || backgroundList[0].url,
       color,
       predefineColors,
       popoverVisible: false,
+      // 导航菜单
+      menus: [
+        {
+          name: '首页',
+          path: 'index',
+          icon: 'el-icon-menu',
+        },
+        {
+          name: '导航2',
+          icon: 'el-icon-menu',
+          children: [
+            {
+              name: '导航2-1',
+              path: 'userCenter',
+            },
+            {
+              name: '导航2-2',
+              path: 'userCenter',
+            },
+          ],
+        },
+        {
+          name: '我的',
+          path: 'userCenter',
+          icon: 'el-icon-menu',
+          children: [],
+        },
+      ],
     };
   },
   watch: {
@@ -84,6 +146,11 @@ export default {
         this.changeTheme(val);
       },
     },
+  },
+  computed: {
+    ...mapState([
+      'cdn',
+    ]),
   },
   methods: {
     ...mapMutations([
@@ -198,6 +265,15 @@ export default {
       margin-bottom: 20px;
       margin-top: 10px;
       height: calc(100% - 30px);
+      &>div {
+        min-height: 100%;
+        height: 100%;
+        width: 100%;
+        border-radius: 10px;
+        background: rgba(250, 250, 250, .3);
+        display: flex;
+        position: relative;
+      }
     }
   }
   .el-backtop {

@@ -12,9 +12,9 @@ import qs from 'qs';
 import { Message } from 'element-ui';
 // import store from '@/store';
 
-const root = `${window.location.protocol}//${window.location.host}`;
+const baseURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}bearConfig/`;
 const config = {
-  baseURL: `${root}/sys`,
+  baseURL,
   timeout: 30 * 1000, // Timeout
   withCredentials: true, // Check cross-site Access-Control
 };
