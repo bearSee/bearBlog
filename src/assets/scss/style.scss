@@ -1,1 +1,28 @@
 @import "./theme.scss";
+
+.el-dialog__wrapper {
+    .el-dialog {
+        background: var(--bgColor);
+        .el-dialog__header {
+            background: var(--theme);
+            display: none;
+        }
+        .el-dialog__body {
+            padding: 20px;
+            height: 100%;
+            .el-page-header {
+              padding: 0 20px;
+              color: #fff;
+              .el-page-header__left {
+                min-width: 60px;
+              }
+              .el-page-header__content {
+                color: var(--theme);
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+              }
+            }
+        }
+    }
+}

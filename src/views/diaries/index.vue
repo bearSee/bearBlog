@@ -177,13 +177,6 @@ export default {
         color: #d7eeda;
         display: flex;
         flex-direction: column;
-        .el-page-header {
-          padding: 0 20px;
-          color: #fff;
-          .el-page-header__content {
-            color: var(--theme);
-          }
-        }
         .detali-content {
           flex: 1 1 auto;
           overflow-y: auto;
