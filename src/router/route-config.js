@@ -33,6 +33,22 @@ export default {
             requirAuth: false,
           },
         },
+        {
+          name: 'memories',
+          path: '/memories',
+          component: () => import(/* webpackChunkName: "memories" */ '@/views/memories/index'),
+          meta: {
+            requirAuth: false,
+          },
+        },
+        {
+          name: 'diaries',
+          path: '/diaries',
+          component: () => import(/* webpackChunkName: "diaries" */ '@/views/diaries/index'),
+          meta: {
+            requirAuth: false,
+          },
+        },
       ],
     },
   ],

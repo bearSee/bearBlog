@@ -1,4 +1,4 @@
-const color = window.localStorage.getItem('theme-color') || '#fff';
+const color = window.localStorage.getItem('theme-color') || 'rgba(210, 190, 82, 1)';
 const currentBackground = window.localStorage.getItem('current-background');
 
 export default {
@@ -19,6 +19,10 @@ export default {
     'hsla(209, 100%, 56%, 0.73)',
   ],
   backgroundList: [
+    {
+      url: 'study-bg.jpg',
+      name: '数学',
+    },
     {
       url: 'catcher.jpg',
       name: '麦田',
@@ -42,10 +46,6 @@ export default {
     {
       url: 'catcher-grain.jpg',
       name: '麦穗',
-    },
-    {
-      url: 'study-bg.jpg',
-      name: '数学',
     },
   ],
   currentBackground,

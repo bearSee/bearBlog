@@ -48,9 +48,8 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   response => response,
   (error) => {
-    const response = error.response;
-    const data = response.data;
-    Message.error(data.message || '服务器内部异常');
+    const message = window.localStorage.getItem('i18n') === 'en-US' ? 'Server internal exception' : '服务器内部异常';
+    Message.warning(message);
     return Promise.reject(error);
   },
 );

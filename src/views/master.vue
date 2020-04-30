@@ -23,25 +23,26 @@
         </div>
         <el-menu
           mode="horizontal"
+          class="master-menu transverse-scroll"
           router
-          background-color="#545c64"
-          text-color="#fff"
+          :background-color="menuConfig.backgroundColor"
+          :text-color="menuConfig.textColor"
           :active-text-color="color"
-          :default-active="menus && menus[0] && menus[0].path || null">
-          <template v-for="(menu, i) of menus">
+          :default-active="this.$route.path || null">
+          <template v-for="(menu, i) of (menuConfig.menus || [])">
             <el-submenu
               v-if="menu.children && menu.children.length"
               :index="menu.name"
               :key="i">
               <template slot="title">
                 <i v-if="menu.icon" :class="menu.icon"></i>
-                <span>{{ menu.name }}</span>
+                <span>{{ $t(menu.name) }}</span>
               </template>
               <el-menu-item
                 v-for="child of menu.children"
                 :index="child.path"
                 :key="child.name">
-                {{ child.name }}
+                {{ $t(child.name) }}
               </el-menu-item>
             </el-submenu>
             <el-menu-item
@@ -49,7 +50,7 @@
               :index="menu.path"
               :key="i">
               <i v-if="menu.icon" :class="menu.icon"></i>
-              <span>{{ menu.name }}</span>
+              <span>{{ $t(menu.name) }}</span>
             </el-menu-item>
           </template>
         </el-menu>
@@ -73,12 +74,15 @@
           <el-color-picker v-model="color" show-alpha :predefine="predefineColors"></el-color-picker>
         </div>
       </el-header>
-      <el-main class="main-content">
+      <el-main class="main-content vertical-scroll">
         <keep-alive>
           <router-view class="animated bounceInUp delay-0.5s" v-if="$route.meta.keepAlive"></router-view>
         </keep-alive>
         <router-view class="animated bounceInUp delay-0.5s" v-if="!$route.meta.keepAlive"></router-view>
       </el-main>
+      <div class="beian-number">
+        <span @click="handlerClick">Copyright © Bearsee 粤ICP备18057546号</span>
+      </div>
     </el-container>
     <el-backtop target=".main-content">
       <i class="el-icon-arrow-up go-top"></i>
@@ -109,34 +113,6 @@ export default {
       color,
       predefineColors,
       popoverVisible: false,
-      // 导航菜单
-      menus: [
-        {
-          name: '首页',
-          path: 'index',
-          icon: 'el-icon-menu',
-        },
-        {
-          name: '导航2',
-          icon: 'el-icon-menu',
-          children: [
-            {
-              name: '导航2-1',
-              path: 'userCenter',
-            },
-            {
-              name: '导航2-2',
-              path: 'userCenter',
-            },
-          ],
-        },
-        {
-          name: '我的',
-          path: 'userCenter',
-          icon: 'el-icon-menu',
-          children: [],
-        },
-      ],
     };
   },
   watch: {
@@ -150,7 +126,11 @@ export default {
   computed: {
     ...mapState([
       'cdn',
+      'wholeConfig',
     ]),
+    menuConfig() {
+      return this.wholeConfig && this.wholeConfig.menuConfig || {};
+    },
   },
   methods: {
     ...mapMutations([
@@ -171,6 +151,11 @@ export default {
     changeLang() {
       const lange = this.$i18n.locale === 'zh-CN' ? 'en-US' : 'zh-CN';
       this.toSwitchLanguage(lange);
+      window.localStorage.setItem('i18n', lange);
+    },
+    handlerClick() {
+      const url = 'http://www.beian.miit.gov.cn';
+      window.open(url);
     },
     // 监听视口尺寸变化
     clientChange() {
@@ -205,10 +190,13 @@ export default {
     background: rgba(0, 0, 0, .2);
     .master-head {
       justify-content: space-between;
+      background: var(--bgColor);
       .head-left {
         display: flex;
+        min-width: 200px;
+        width: 200px;
         .avatar-popover {
-          margin: auto;
+          margin: auto 0;
           cursor: pointer;
           .el-popover__reference {
             display: flex;
@@ -222,8 +210,21 @@ export default {
           }
         }
       }
-      .head-right {
+      .el-menu {
         display: flex;
+        justify-content: center;
+        overflow-y: hidden;
+        overflow-x: auto;
+        flex: 1 1 auto;
+        margin: 0 20px;
+        border: 0;
+        background: transparent;
+      }
+      .head-right {
+        min-width: 210px;
+        width: 210px;
+        display: flex;
+        justify-content: flex-end;
         .background-popover {
           display: flex;
           margin: auto 0;
@@ -261,18 +262,27 @@ export default {
       }
     }
     .main-content {
-      padding: 0 20px;
-      margin-bottom: 20px;
-      margin-top: 10px;
-      height: calc(100% - 30px);
+      padding: 0 10px;
+      margin: 10px 0;
+      height: calc(100% - 20px);
+      border-radius: 10px;
+      position: relative;
       &>div {
         min-height: 100%;
-        height: 100%;
         width: 100%;
-        border-radius: 10px;
         background: rgba(250, 250, 250, .3);
         display: flex;
-        position: relative;
+      }
+    }
+    .beian-number {
+      text-align: center;
+      background: var(--bgColor);
+      color: var(--theme);
+      opacity: .8;
+      font-size: 14px;
+      padding: 4px 0 2px 0;
+      span {
+        cursor: pointer;
       }
     }
   }
@@ -282,18 +292,32 @@ export default {
     background: rgba(0, 0, 0, .5);
   }
 }
-/*滚动条样式*/
-.main-content::-webkit-scrollbar {
+/*竖向滚动条样式*/
+.vertical-scroll::-webkit-scrollbar {
   width: 4px;
   background: #f8f8f8;
 }
-.main-content::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+.vertical-scroll::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+  border-radius: 4px;
   -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+  background: var(--theme);
+}
+.vertical-scroll::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  border-radius: 4px;
+}
+/*横向滚动条样式*/
+.transverse-scroll::-webkit-scrollbar {
+  height: 4px;
   background: #f8f8f8;
 }
-.main-content::-webkit-scrollbar-track {/*滚动条里面轨道*/
+.transverse-scroll::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
   border-radius: 4px;
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
   background: var(--theme);
+}
+.transverse-scroll::-webkit-scrollbar-track {/*滚动条里面轨道*/
+  border-radius: 4px;
+  // height: 1px;
 }
 .el-popover {
   background: rgba(250, 250, 250, .2);

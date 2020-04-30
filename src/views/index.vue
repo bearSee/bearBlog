@@ -7,7 +7,7 @@
  -->
 <template>
   <div class="index">
-    <my-earth ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions" :mapbgColor="mapbgColor" @dblclick="handlerClick"></my-earth>
+    <my-earth v-if="earthOptions && mapOptions" ref="earth" id="earth" :earthOptions="earthOptions" :mapOptions="mapOptions" :mapbgColor="mapbgColor"></my-earth>
   </div>
 </template>
 
@@ -24,150 +24,17 @@ export default {
   },
   data() {
     const mapbgColor = window.localStorage.getItem('theme-color');
-
     return {
       mapbgColor,
-      earthOptions: {
-        globe: {
-          globeRadius: 83,
-          baseTexture: '', // 贴图 球形和平面的吻合
-          silent: true,
-          environment: starfield, // 背景
-          // heightTexture: starfield, // 地球的整个纹路
-          shading: 'realistic',
-          light: {
-            main: {
-              color: '#fff',
-              intensity: 0,
-              shadow: false,
-              shadowQuality: 'high',
-              alpha: 55,
-              beta: 10,
-            },
-            ambient: {
-              color: '#fff',
-              intensity: 1,
-            },
-          },
-          postEffect: {
-            enable: false,
-            SSAO: {
-              enable: true,
-              radius: 10,
-            },
-          },
-
-          // 地球是否自己转动 autoRotate为true时自己转动
-          viewControl: {
-            autoRotate: true,
-            animationDurationUpdate: 2000,
-            targetCoord: '',
-          },
-        },
-        series: [
-          // {
-          //   type: 'scatter3D',
-          //   coordinateSystem: 'globe',
-          //   blendMode: 'lighter',
-          //   symbolSize: 20,
-          //   symbol: 'pin',
-          //   silent: false,
-          //   itemStyle: {
-          //     color(params) {
-          //       const colorList = ['rgb(246, 153, 180)', 'rgb(118,77,209)'];
-          //       if (params.dataIndex % 2 !== 0) {
-          //         return colorList[0];
-          //       }
-          //       return colorList[1];
-          //     },
-          //     opacity: 1,
-          //   },
-          //   label: {
-          //     show: true,
-          //     textStyle: {
-          //       fontSize: 20,
-          //     },
-          //     formatter(params) {
-          //       if (params.dataIndex % 2 !== 0) {
-          //         return `Destination:\n${params.name}`;
-          //       }
-          //       return `Departure:\n${params.name}`;
-          //     },
-          //     position: 'top',
-          //   },
-          // },
-          {
-            name: 'lines3D',
-            type: 'lines3D',
-            coordinateSystem: 'globe',
-            effect: {
-              show: true,
-              period: 2,
-              trailWidth: 3,
-              trailLength: 0.5,
-              trailOpacity: 1,
-              trailColor: '#0087f4',
-            },
-            blendMode: 'lighter',
-            lineStyle: {
-              width: 1,
-              color: '#0087f4',
-              opacity: 0,
-            },
-            data: [],
-            silent: false,
-          },
-        ],
-      },
-      mapOptions: {
-        backgroundColor: mapbgColor, // 立体球形贴图的颜色
-        visualMap: {
-          show: false,
-          min: 0,
-          max: 100000,
-        },
-        series: [
-          {
-            type: 'map',
-            map: 'world',
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            environment: 'rgba(0,0,0,0)',
-            boundingCoords: [
-              [-180, 90],
-              [180, -90],
-            ],
-            itemStyle: {
-              normal: {
-                borderWidth: 2,
-                borderColor: 'rgb(0,232,232)', // 地球纹路的颜色
-                areaColor: {
-                  type: 'linear',
-                  x: 0,
-                  y: 0,
-                  x2: 0,
-                  y2: 1,
-                  // 相邻每个板块 从上到下的颜色变化
-                  colorStops: [{
-                    offset: 0.2, color: 'rgb(0,48,62)', // 0% 处的颜色
-                  }, {
-                    offset: 0.8, color: 'rgba(0,179,188,0.8)', // 100% 处的颜色
-                  }],
-                  global: false, // 缺省为 false
-                },
-              },
-            },
-          },
-        ],
-      },
+      earthOptions: null,
+      mapOptions: null,
       timer: null,
     };
   },
   computed: {
     ...mapState([
       'themeColor',
+      'wholeConfig',
     ]),
   },
   watch: {
@@ -201,19 +68,16 @@ export default {
         this.$refs.earth.initEarth();
       }, 300);
     },
-    // test() {
-    //   this.$http.get('configData.json').then(({ data }) => {
-    //     console.log('tag', data);
-    //   });
-    // },
-    handlerClick(a, b) {
-      console.log('aabb', a, b);
-    },
   },
   created() {
+    const { earthOptions = {}, mapOptions = {} } = JSON.parse(JSON.stringify(this.wholeConfig && this.wholeConfig.earthConfig || {}));
     // 划多条线
     // eslint-disable-next-line
-    this.earthOptions.series[0].data = Array.apply(null, Array(150)).map(() => this.rodamData());
+    earthOptions.series[0].data = Array.apply(null, Array(150)).map(() => this.rodamData());
+    earthOptions.globe.environment = starfield;
+    mapOptions.backgroundColor = this.mapbgColor;
+    this.earthOptions = earthOptions;
+    this.mapOptions = mapOptions;
   },
   mounted() {
     window.addEventListener('resize', this.initEarth);
@@ -228,6 +92,7 @@ export default {
 @import "@/assets/scss/theme.scss";
 
 .index {
+  height: 100%;
   #earth {
     height: 100%;
     width: 100%;
