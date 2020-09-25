@@ -97,7 +97,6 @@ import themeConfig from '@/utils/themeConfig';
 
 const {
   color,
-  backgroundList,
   currentBackground,
   predefineColors,
 } = themeConfig;
@@ -108,8 +107,8 @@ export default {
   data() {
     return {
       bgStyle: '',
-      backgroundList,
-      currentBackground: currentBackground || backgroundList[0].url,
+      backgroundList: [],
+      currentBackground,
       color,
       predefineColors,
       popoverVisible: false,
@@ -126,11 +125,8 @@ export default {
   computed: {
     ...mapState([
       'cdn',
-      'wholeConfig',
+      'menuConfig',
     ]),
-    menuConfig() {
-      return this.wholeConfig && this.wholeConfig.menuConfig || {};
-    },
   },
   methods: {
     ...mapMutations([
@@ -166,6 +162,12 @@ export default {
       }
       this.bgStyle = 'background-size: auto 100%';
     },
+  },
+  created() {
+    this.$http.get('master/bgConfig.json').then(({ data }) => {
+      this.backgroundList = data.list || [];
+      this.currentBackground = currentBackground || data.default;
+    });
   },
   mounted() {
     this.clientChange();
@@ -332,6 +334,7 @@ export default {
     .list {
       // width: 70px;
       padding: 0 10px;
+      cursor: pointer;
       .el-image__inner {
         width: auto;
         height: 22px;

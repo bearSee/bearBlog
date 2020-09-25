@@ -34,7 +34,6 @@ export default {
   computed: {
     ...mapState([
       'themeColor',
-      'wholeConfig',
     ]),
   },
   watch: {
@@ -70,14 +69,16 @@ export default {
     },
   },
   created() {
-    const { earthOptions = {}, mapOptions = {} } = JSON.parse(JSON.stringify(this.wholeConfig && this.wholeConfig.earthConfig || {}));
-    // 划多条线
-    // eslint-disable-next-line
-    earthOptions.series[0].data = Array.apply(null, Array(150)).map(() => this.rodamData());
-    earthOptions.globe.environment = starfield;
-    mapOptions.backgroundColor = this.mapbgColor;
-    this.earthOptions = earthOptions;
-    this.mapOptions = mapOptions;
+    this.$http.get('index/earthConfig.json').then(({ data }) => {
+      const { earthOptions = {}, mapOptions = {} } = data || {};
+      // 划多条线
+      // eslint-disable-next-line
+      earthOptions.series[0].data = Array.apply(null, Array(150)).map(() => this.rodamData());
+      earthOptions.globe.environment = starfield;
+      mapOptions.backgroundColor = this.mapbgColor;
+      this.earthOptions = earthOptions;
+      this.mapOptions = mapOptions;
+    });
   },
   mounted() {
     window.addEventListener('resize', this.initEarth);

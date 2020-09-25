@@ -6,109 +6,110 @@
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div class="memories">
-    <el-image ref="imagePreview" v-if="curentImage" class="image-preview" :src="curentImage" :preview-src-list="[curentImage]"></el-image>
-    <el-carousel
-      class="memories-card animated bounceInRight delay-1s"
-      :interval="2000"
-      type="card"
-      indicator-position="none">
-      <el-carousel-item
-        v-for="item in cardItems"
-        :key="item.url">
-        <div class="carousel-box" @click="handlerPreview(item)">
-          <div class="des-box" v-if="i18nName === 'zh-CN'">
-            <div class="name">{{ item.name_Cn }} {{ item.date }}</div>
-            <div class="des">{{ item.describe_Cn }}</div>
-          </div>
-          <div class="des-box" v-else>
-            <div class="name">{{ item.name_En }} {{ item.date }}</div>
-            <div class="des">{{ item.describe_En }}</div>
-          </div>
-          <el-image class="image" :src="cdn + item.url" :fit="item.fit"></el-image>
-        </div>
-      </el-carousel-item>
-    </el-carousel>
-    <div class="memories-footer">
-      <el-carousel
-        class="memories-normal animated bounceInLeft delay-1s"
-        :interval="1500"
-        indicator-position="none">
-        <el-carousel-item
-          v-for="item in normalItems"
-          :key="item.url">
-          <div class="carousel-box" @click="handlerPreview(item)">
-            <div class="des-box" v-if="i18nName === 'zh-CN'">
-              <div class="name">{{ item.name_Cn }} {{ item.date }}</div>
-              <div class="des">{{ item.describe_Cn }}</div>
-            </div>
-            <div class="des-box" v-else>
-              <div class="name">{{ item.name_En }} {{ item.date }}</div>
-              <div class="des">{{ item.describe_En }}</div>
-            </div>
-            <el-image class="image" :src="cdn + item.url" :fit="item.fit"></el-image>
-          </div>
-        </el-carousel-item>
-      </el-carousel>
-      <div class="vidio-list animated fadeIn delay-2s vertical-scroll">
-        <video
-          class="vidio"
-          ref="videoPlayer"
-          muted
-          v-for="(vd, i) in vidioList"
-          :key="i"
-          :src="cdn + vd.url"
-          type="video/mp4"
-          :style="vd.style"
-          @click="videoPlay(vd, i)"
-          controls>
-        </video>
-      </div>
-    </div>
+  <div ref="memories" class="memories" :style="`height: ${dialogVisible ? '100%' : 'auto'};overflow-y: ${dialogVisible ? 'hidden' : 'auto'}`">
+    <el-timeline>
+      <el-timeline-item
+        placement="top"
+        size="large"
+        v-for="data in timelineData"
+        :key="data.timestamp"
+        :timestamp="data.timestamp">
+        <el-card>
+          <div class="content-title">{{ i18nName === 'zh-CN' ? data.title_Cn : data.title_En }}</div>
+          <template v-for="(item, i) in data.images">
+            <el-image
+              class="image"
+              v-if="item.type === 'image'"
+              :key="i"
+              :title="i18nName === 'zh-CN' ? item.describe_Cn : item.describe_En"
+              :src="cdn + item.url"
+              @click="handlerOpenDialog(item)"
+              :fit="item.fit">
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
+            <video
+              class="image"
+              v-else-if="item.type === 'video'"
+              :key="i"
+              :ref="'videoPlayer' + data.timestamp + i"
+              muted
+              :src="cdn + item.url"
+              type="video/mp4"
+              :style="item.style"
+              @click="handlerPlayVideo(item, data.timestamp + i)"
+              controls>
+            </video>
+          </template>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
     <el-dialog
-      class="video-fullscreen"
+      class="preview-fullscreen"
       fullscreen
       :modal="false"
       :show-close="false"
       :close-on-press-escape="false"
-      v-if="videoVisible"
-      :visible.sync="videoVisible">
-      <el-page-header :title="i18nName === 'zh-CN' ? '返回' : 'Back'" @back="videoVisible = false" :content="videoDescribe"></el-page-header>
-      <video v-if="currentVideo.url" :src="cdn + currentVideo.url" autoplay controls></video>
+      v-if="dialogVisible"
+      :visible.sync="dialogVisible">
+      <el-page-header :title="$t('返回')" @back="handlerCloseDialog" :content="imageDescribe"></el-page-header>
+      <!-- <el-image
+        class="preview"
+        v-if="currentImage.type === 'image'"
+        :src="cdn + currentImage.url"
+        :fit="currentImage.fit || 'contain'">
+        <div slot="error" class="image-slot">
+          <i class="el-icon-picture-outline"></i>
+        </div>
+      </el-image> -->
+      <div class="preview" v-if="currentImage.type === 'image'">
+        <image-viewer
+          ref="imageViewer"
+          inline
+          isShow
+          :title="false"
+          :fullscreen="false"
+          :navbar="false"
+          :default-index="0"
+          :images="[cdn + currentImage.url]">
+        </image-viewer>
+      </div>
+      <video
+        class="preview"
+        v-else-if="currentImage.type === 'video'"
+        :src="cdn + currentImage.url"
+        autoplay
+        controls>
+      </video>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import imageViewer from '@/components/imageviewer';
 
 export default {
   name: 'memories',
+  components: {
+    imageViewer,
+  },
   data() {
     return {
-      curentImage: '',
-      currentVideo: {},
-      videoVisible: false,
+      timelineData: [],
+      currentImage: {},
+      dialogVisible: false,
     };
   },
   computed: {
     ...mapState([
       'cdn',
-      'wholeConfig',
     ]),
     i18nName() {
       return this.$i18n.locale;
     },
-    cardItems() {
-      return this.wholeConfig.photoAlbumConfig && this.wholeConfig.photoAlbumConfig.cardItems || [];
-    },
-    normalItems() {
-      return this.wholeConfig.photoAlbumConfig && this.wholeConfig.photoAlbumConfig.normalItems || [];
-    },
-    vidioList() {
-      return this.wholeConfig.photoAlbumConfig && this.wholeConfig.photoAlbumConfig.vidioList || [];
-    },
-    videoDescribe() {
+    imageDescribe() {
       /* eslint-disable */
       const {
         name_Cn,
@@ -116,31 +117,54 @@ export default {
         describe_Cn,
         describe_En,
         date,
-      } = this.currentVideo;
+      } = this.currentImage;
       return this.i18nName === 'zh-CN' ? `${name_Cn} - ${describe_Cn} (${date})` : `${name_En} - ${describe_En} (${date})`;
     },
   },
   methods: {
-    handlerPreview({ url }) {
-      this.curentImage = '';
-      this.$nextTick(() => {
-        this.curentImage = this.cdn + url;
-        // this.$nextTick(() => {
-        //   this.$refs.imagePreview.showViewer = true;
-        // });
+    getMemories() {
+      this.$http.get('memories/timelineConfig.json').then(({ data }) => {
+        this.timelineData = data && data.list || [];
       });
     },
-    videoPlay(vd, i) {
-      this.currentVideo = vd;
-      this.videoVisible = true;
-      const video = this.$refs.videoPlayer[i];
-      // video.play();
+    handlerPlayVideo(item, str) {
+      this.handlerOpenDialog(item);
+      const video = this.$refs[`videoPlayer${str}`][0];
       setTimeout(() => {
         video.pause();
       }, 500);
     },
+    handlerOpenDialog(item) {
+      const element = this.$refs.memories && this.$refs.memories.offsetParent || {};
+      this.scrollTop = element.scrollTop || 0;
+      this.currentImage = item;
+      this.dialogVisible = true;
+      this.$nextTick(() => {
+        this.initView();
+      });
+    },
+    handlerCloseDialog() {
+      this.dialogVisible = false;
+      this.$nextTick(() => {
+        const element = this.$refs.memories && this.$refs.memories.offsetParent || {};
+        if (!element.scrollTo) {
+          element.scrollTop = this.scrollTop;
+        } else {
+          element.scrollTo({
+            top: this.scrollTop,
+            behavior: 'instant',
+          });
+        }
+      });
+    },
+    initView() {
+      this.$refs.imageViewer.destroy();
+      this.$refs.imageViewer.init();
+      this.$refs.imageViewer.show();
+    },
   },
   created() {
+    this.getMemories();
   },
 };
 </script>
@@ -149,84 +173,68 @@ export default {
 @import "@/assets/scss/theme.scss";
 
 .memories {
-  height: 100%;
   flex-direction: column;
-  overflow: hidden;
-  .image-preview {
-    width: 0;
-    height: 0;
-  }
-  .el-carousel {
-    &.memories-card {
-      width: 100%;
-      height: calc(50% - 5px);
-      margin-bottom: 5px;
-    }
-    .el-carousel__container {
-      width: 100%;
-      height: 100%;
-      .el-carousel__item {
-        .carousel-box {
-          height: 100%;
-          cursor: pointer;
-          .des-box {
-            position: absolute;
-            z-index: 9;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--theme);
-            text-align: center;
-            .name,.des {
-              font-size: 12px;
-              margin: 3px 0;
-              max-width: 200px;
-              line-height: 1.2;
+  overflow-x: hidden;
+  .el-timeline {
+    padding: 20px;
+    .el-timeline-item__wrapper {
+      .el-timeline-item__timestamp {
+        color: var(--theme);
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .el-timeline-item__content {
+        .el-card {
+          display: inline-block;
+          max-width: 1428px;
+          margin-top: 10px;
+          .el-card__body {
+            background: #f8f8f8;
+            .content-title {
+              margin-bottom: 10px;
             }
-          }
-          .el-image {
-            height: 100%;
-            border-radius: 5px;
+            .image {
+              width: 150px;
+              height: 150px;
+              margin: 2px;
+              cursor: pointer;
+              .image-slot {
+                height: 100%;
+                font-size: 40px;
+                display: flex;
+                color: #999;
+                background: #fff;
+                border: 1px solid #eee;
+                i {
+                  margin: auto;
+                }
+              }
+            }
           }
         }
       }
     }
   }
-  .memories-footer {
-    display: flex;
-    width: 100%;
-    height: calc(50% - 5px);
-    margin-top: 5px;
-    .memories-normal {
-      width: 50%;
-      height: 100%;
-      margin-right: 5px;
-    }
-    .vidio-list {
-      margin-left: 5px;
-      width: 50%;
-      height: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      overflow-y: auto;
-      justify-content: space-around;
-      .vidio {
-        min-width: 150px;
-        height: 50%;
-        margin-bottom: 20px;
-        cursor: pointer;
-      }
-    }
-  }
-  .video-fullscreen {
+  .preview-fullscreen {
     .el-dialog__body {
       .des-box {
       }
-      video {
+      .preview {
         height: calc(100% - 45px);
+        max-width: 100%;
         margin: auto;
         display: block;
         margin-top: 20px;
+        .image-slot {
+          height: 100%;
+          font-size: 100px;
+          display: flex;
+          background: #f8f8f8;
+          color: #999;
+          i {
+            margin: auto;
+          }
+        }
       }
     }
   }

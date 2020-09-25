@@ -3,8 +3,6 @@ import Element from 'element-ui';
 import VueI18n from 'vue-i18n';
 import enLocale from 'element-ui/lib/locale/lang/en';
 import zhLocale from 'element-ui/lib/locale/lang/zh-CN';
-import enZte from 'zfs-ui/lib/locale/lang/en';
-import cnZte from 'zfs-ui/lib/locale/lang/cn';
 import en from './en';
 import cn from './cn';
 
@@ -16,18 +14,17 @@ const i18n = new VueI18n({
     'en-US': {
       ...enLocale,
       ...en,
-      ...enZte,
     },
     'zh-CN': {
       ...zhLocale,
       ...cn,
-      ...cnZte,
     },
   },
 });
 
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value),
+  size: 'small',
 });
 
 export default i18n;

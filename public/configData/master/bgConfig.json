@@ -1,0 +1,33 @@
+{
+    "list": [
+        {
+            "name": "数学",
+            "url": "study-bg.jpg"
+        },
+        {
+            "name": "麦田",
+            "url": "catcher.jpg"
+        },
+        {
+            "name": "灯塔",
+            "url": "light-house.jpg"
+        },
+        {
+            "name": "落枫",
+            "url": "fall-maple-leaves.jpg"
+        },
+        {
+            "name": "麦圈A",
+            "url": "catcher-circle-A.jpg"
+        },
+        {
+            "name": "麦圈B",
+            "url": "catcher-circle-B.jpg"
+        },
+        {
+            "name": "麦穗",
+            "url": "catcher-grain.jpg"
+        }
+    ],
+    "default": "catcher.jpg"
+}

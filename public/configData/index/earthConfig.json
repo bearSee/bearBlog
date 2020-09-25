@@ -1,0 +1,108 @@
+{
+    "earthOptions": {
+        "globe": {
+            "globeRadius": 83,
+            "baseTexture": "",
+            "silent": true,
+            "environment": "",
+            "heightTexture": "",
+            "shading": "realistic",
+            "light": {
+                "main": {
+                    "color": "#fff",
+                    "intensity": 0,
+                    "shadow": false,
+                    "shadowQuality": "high",
+                    "alpha": 55,
+                    "beta": 10
+                },
+                "ambient": {
+                    "color": "#fff",
+                    "intensity": 1
+                }
+            },
+            "postEffect": {
+                "enable": false,
+                "SSAO": {
+                    "enable": true,
+                    "radius": 10
+                }
+            },
+            "viewControl": {
+                "autoRotate": true,
+                "animationDurationUpdate": 2000,
+                "targetCoord": ""
+            }
+        },
+        "series": [
+            {
+                "name": "lines3D",
+                "type": "lines3D",
+                "coordinateSystem": "globe",
+                "effect": {
+                    "show": true,
+                    "period": 2,
+                    "trailWidth": 3,
+                    "trailLength": 0.5,
+                    "trailOpacity": 1,
+                    "trailColor": "#0087f4"
+                },
+                "blendMode": "lighter",
+                "lineStyle": {
+                    "width": 1,
+                    "color": "#0087f4",
+                    "opacity": 0
+                },
+                "data": [],
+                "silent": false
+            }
+        ]
+    },
+    "mapOptions": {
+        "backgroundColor": "",
+        "visualMap": {
+            "show": false,
+            "min": 0,
+            "max": 100000
+        },
+        "series": [
+            {
+                "type": "map",
+                "map": "world",
+                "left": 0,
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "environment": "rgba(0,0,0,0)",
+                "boundingCoords": [
+                    [-180, 90],
+                    [180, -90]
+                ],
+                "itemStyle": {
+                    "normal": {
+                        "borderWidth": 2,
+                        "borderColor": "rgb(0,232,232)",
+                        "areaColor": {
+                            "type": "linear",
+                            "x": 0,
+                            "y": 0,
+                            "x2": 0,
+                            "y2": 1,
+                            "colorStops": [
+                                {
+                                    "offset": 0.2,
+                                    "color": "rgb(0,48,62)"
+                                },
+                                {
+                                    "offset": 0.8,
+                                    "color": "rgba(0,179,188,0.8)"
+                                }
+                            ],
+                            "global": false
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}

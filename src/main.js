@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import theme from 'zfs-ui/lib/mixins/theme';
 import App from './App';
 import './plugins/cookies';
 import './plugins/axios';
@@ -13,6 +12,5 @@ new Vue({
   router,
   store,
   i18n,
-  mixins: [theme],
   render: h => h(App),
 }).$mount('#app');

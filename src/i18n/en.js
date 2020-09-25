@@ -9,4 +9,5 @@ export default {
   发表日期: 'PublishTime',
   阶段: 'phase',
   作者: 'author',
+  返回: 'Back',
 };

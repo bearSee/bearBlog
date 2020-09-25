@@ -1,0 +1,29 @@
+{
+    "menus": [
+        {
+            "name": "首页",
+            "path": "/index",
+            "icon": "el-icon-s-home"
+        },
+        {
+            "name": "影集",
+            "path": "/memories",
+            "icon": "el-icon-camera-solid",
+            "children": []
+        },
+        {
+            "name": "日志",
+            "path": "/diaries",
+            "icon": "el-icon-s-order",
+            "children": []
+        },
+        {
+            "name": "我的",
+            "path": "/userCenter",
+            "icon": "el-icon-s-custom",
+            "children": []
+        }
+    ],
+    "backgroundColor": "#545c64",
+    "textColor": "#fff"
+}
