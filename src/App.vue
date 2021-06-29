@@ -3,8 +3,7 @@
     <transition
       name="main-classes-transition"
       enter-active-class="animated fadeIn"
-      leave-active-class="animated zoomOutDown"
-    >
+      leave-active-class="animated zoomOutDown">
       <router-view></router-view>
     </transition>
   </div>

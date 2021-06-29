@@ -84,12 +84,12 @@ export default {
   },
   methods: {
     getDiaries() {
-      this.$http.get('diariesData.json').then(({ data }) => {
+      this.$http.get('diaries/diarieLists.json').then(({ data }) => {
         this.diarieData = data && data.list || [];
       });
     },
     handlerRowClick({ fileName }) {
-      this.$http.get(`diariesData/${fileName}`).then(({ data }) => {
+      this.$http.get(`diaries/${fileName}`).then(({ data }) => {
         this.detailVisible = true;
         this.detailData = data || {};
       });

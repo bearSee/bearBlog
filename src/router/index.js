@@ -7,12 +7,12 @@ Vue.use(Router);
 const router = new Router(routeConfig);
 router.beforeEach(async (to, from, next) => {
   document.body.scrollTop = 0;
-  if (!store.state.wholeConfig) {
-    await Vue.prototype.$http.get('configData.json').then(({ data }) => {
+  if (!store.state.menuConfig) {
+    await Vue.prototype.$http.get('master/menuConfig.json').then(({ data }) => {
       data = data || {};
-      store.commit('setWholeConfig', data);
+      store.commit('setMenuConfig', data);
       const componentStyle = document.createElement('style');
-      componentStyle.innerText = `:root {--bgColor:${data.menuConfig && data.menuConfig.backgroundColor || '#545c64'}}`;
+      componentStyle.innerText = `:root {--bgColor:${data.backgroundColor || '#545c64'}}`;
       document.head.appendChild(componentStyle);
     });
   }

@@ -12,7 +12,7 @@ import qs from 'qs';
 import { Message } from 'element-ui';
 // import store from '@/store';
 
-const baseURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}bearConfig/`;
+const baseURL = `${window.location.protocol}//${window.location.host}${window.location.pathname}configData/`;
 const config = {
   baseURL,
   timeout: 30 * 1000, // Timeout
