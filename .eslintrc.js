@@ -1,54 +1,36 @@
-/* eslint-disable */ 
+
 module.exports = {
-  root: true,
-  env: {
-    node: true,
-  },
-  extends: [
-    'plugin:vue/essential',
-    '@vue/airbnb',
-  ],
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  },
-  parserOptions: {
-    parser: 'babel-eslint',
-  },
-  rules: {
-    // don't require .vue extension when importing
-    'import/extensions': ['error', 'always', {
-      js: 'never',
-      vue: 'never',
-    }],
-    // disallow reassignment of function parameters
-    // disallow parameter object manipulation except for specific exclusions
-    'no-param-reassign': ['error', {
-      props: true,
-      ignorePropertyModificationsFor: [
-        'state', // for vuex state
-        'acc', // for reduce accumulators
-        'e', // for e.returnvalue
-      ],
-    }],
-    // allow optionalDependencies
-    'import/no-extraneous-dependencies': ['error', {
-      optionalDependencies: ['test/unit/index.js'],
-    }],
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'guard-for-in': 'off',
-    'linebreak-style': 'off',
-    'no-param-reassign': 'off',
-    'no-plusplus': 'off',
-    'no-restricted-syntax': 'off',
-    'no-mixed-operators': 'off',
-    'no-template-curly-in-string': 'off',
-    'max-len': 'off',
-    'no-underscore-dangle': 'off',
-    'radix': 'off',
-    'prefer-destructuring': 'off',
-    'no-shadow': 'off',
-  },
+    root: true,
+    env: {
+        node: true,
+    },
+    parserOptions: {
+        parser: '@babel/eslint-parser'
+    },
+    extends: [
+        'plugin:vue/strongly-recommended',
+        '@vue/airbnb',
+    ],
+    rules: {
+        'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+        'no-bitwise': ['error', { 'allow': ['~'] }],
+        'linebreak-style': [0 ,'error', 'windows'],
+        'prefer-destructuring': 'off',
+        'no-mixed-operators': 'off',
+        'func-names': 'off',
+        'no-param-reassign': 'off',
+        indent: ['warn', 4],
+        'max-len': ['warn', 200],
+        'import/extensions': ['error', 'always', {
+            js: 'never',
+            vue: 'never',
+        }],
+        'vue/script-indent': ['warn', 4],
+        'vue/html-indent': ['warn', 2],
+        'vue/html-closing-bracket-newline': 'off',
+        'import/no-extraneous-dependencies': ['error', {
+            optionalDependencies: ['test/unit/index.js'],
+        }],
+    },
 };

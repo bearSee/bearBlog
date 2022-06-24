@@ -7,7 +7,9 @@
  -->
 <template>
   <div class="user-center">
-    <div class="title animated infinite bounce delay-2s">正在开发...</div>
+    <div class="title animated infinite bounce delay-2s">
+      ...
+    </div>
   </div>
 </template>
 
@@ -15,20 +17,19 @@
 
 
 export default {
-  name: 'userCenter',
-  data() {
-    return {
-    };
-  },
-  methods: {
-  },
-  created() {
-  },
+    name: 'UserCenter',
+    data() {
+        return {
+        };
+    },
+    methods: {
+    },
+    created() {
+    },
 };
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/theme.scss";
 
 .user-center {
   .title {

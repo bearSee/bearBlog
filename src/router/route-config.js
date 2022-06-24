@@ -6,50 +6,33 @@
  * @LastEditors: Please set LastEditors
  */
 export default {
-  routes: [
-    {
-      path: '/',
-      redirect: '/index',
-      component: () => import(/* webpackChunkName: "master" */ '@/views/master'),
-      meta: {
-        keepAlive: false,
-        requirAuth: false,
-      },
-      children: [
+    routes: [
         {
-          name: 'index',
-          path: '/index',
-          component: () => import(/* webpackChunkName: "index" */ '@/views/index'),
-          meta: {
-            requirAuth: false,
-            keepAlive: true,
-          },
+            path: '/',
+            redirect: '/index',
+            component: () => import(/* webpackChunkName: "master" */ '@/views/master'),
+            children: [
+                {
+                    name: 'index',
+                    path: '/index',
+                    component: () => import(/* webpackChunkName: "index" */ '@/views/index'),
+                },
+                {
+                    name: 'userCenter',
+                    path: '/userCenter',
+                    component: () => import(/* webpackChunkName: "userCenter" */ '@/views/userCenter/index'),
+                },
+                {
+                    name: 'memories',
+                    path: '/memories',
+                    component: () => import(/* webpackChunkName: "memories" */ '@/views/memories/index'),
+                },
+                {
+                    name: 'diaries',
+                    path: '/diaries',
+                    component: () => import(/* webpackChunkName: "diaries" */ '@/views/diaries/index'),
+                },
+            ],
         },
-        {
-          name: 'userCenter',
-          path: '/userCenter',
-          component: () => import(/* webpackChunkName: "userCenter" */ '@/views/userCenter/index'),
-          meta: {
-            requirAuth: false,
-          },
-        },
-        {
-          name: 'memories',
-          path: '/memories',
-          component: () => import(/* webpackChunkName: "memories" */ '@/views/memories/index'),
-          meta: {
-            requirAuth: false,
-          },
-        },
-        {
-          name: 'diaries',
-          path: '/diaries',
-          component: () => import(/* webpackChunkName: "diaries" */ '@/views/diaries/index'),
-          meta: {
-            requirAuth: false,
-          },
-        },
-      ],
-    },
-  ],
+    ],
 };

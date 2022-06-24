@@ -1,16 +1,26 @@
 import Vue from 'vue';
+// 引入 sibionics-ui 框架
+import sibUI from 'sibionics-ui';
 import App from './App';
-import './plugins/cookies';
-import './plugins/axios';
-import './plugins/element';
-import router from './router/index';
+import router from './router';
 import store from './store';
-import i18n from './i18n';
+import cn from './locale/lang/cn';
+import en from './locale/lang/en';
 
-Vue.config.productionTip = false;
+// 引入插件集合
+import './plugins';
+
+// 引入样式表集合
+import './assets/styles';
+
+Vue.use(sibUI, {
+    languages: { 'zh-CN': cn, 'en-US': en },
+    lang: window.localStorage.getItem('lang') || 'zh-CN',
+    // size: 'mini',
+});
+
 new Vue({
-  router,
-  store,
-  i18n,
-  render: h => h(App),
-}).$mount('#app');
+    router,
+    store,
+    render: h => h(App),
+}).$mount('#bear');

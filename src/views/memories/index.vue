@@ -6,7 +6,10 @@
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div ref="memories" class="memories" :style="`height: ${dialogVisible ? '100%' : 'auto'};overflow-y: ${dialogVisible ? 'hidden' : 'auto'}`">
+  <div
+    ref="memories"
+    class="memories"
+    :style="`height: ${dialogVisible ? '100%' : 'auto'};overflow-y: ${dialogVisible ? 'hidden' : 'auto'}`">
     <el-timeline>
       <el-timeline-item
         placement="top"
@@ -15,7 +18,9 @@
         :key="data.timestamp"
         :timestamp="data.timestamp">
         <el-card>
-          <div class="content-title">{{ i18nName === 'zh-CN' ? data.title_Cn : data.title_En }}</div>
+          <div class="content-title">
+            {{ i18nName === 'zh-CN' ? data.title_Cn : data.title_En }}
+          </div>
           <template v-for="(item, i) in data.images">
             <el-image
               class="image"
@@ -25,8 +30,10 @@
               :src="cdn + item.url"
               @click="handlerOpenDialog(item)"
               :fit="item.fit">
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
+              <div
+                slot="error"
+                class="image-slot">
+                <i class="el-icon-picture-outline" />
               </div>
             </el-image>
             <video
@@ -39,8 +46,7 @@
               type="video/mp4"
               :style="item.style"
               @click="handlerPlayVideo(item, data.timestamp + i)"
-              controls>
-            </video>
+              controls />
           </template>
         </el-card>
       </el-timeline-item>
@@ -53,7 +59,10 @@
       :close-on-press-escape="false"
       v-if="dialogVisible"
       :visible.sync="dialogVisible">
-      <el-page-header :title="$t('返回')" @back="handlerCloseDialog" :content="imageDescribe"></el-page-header>
+      <el-page-header
+        :title="$t('返回')"
+        @back="handlerCloseDialog"
+        :content="imageDescribe" />
       <!-- <el-image
         class="preview"
         v-if="currentImage.type === 'image'"
@@ -63,54 +72,50 @@
           <i class="el-icon-picture-outline"></i>
         </div>
       </el-image> -->
-      <div class="preview" v-if="currentImage.type === 'image'">
+      <div
+        class="preview"
+        v-if="currentImage.type === 'image'">
         <image-viewer
           ref="imageViewer"
           inline
-          isShow
+          is-show
           :title="false"
           :fullscreen="false"
           :navbar="false"
           :default-index="0"
-          :images="[cdn + currentImage.url]">
-        </image-viewer>
+          :images="[cdn + currentImage.url]" />
       </div>
       <video
         class="preview"
         v-else-if="currentImage.type === 'video'"
         :src="cdn + currentImage.url"
         autoplay
-        controls>
-      </video>
+        controls />
     </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import imageViewer from '@/components/imageviewer';
 
 export default {
-  name: 'memories',
-  components: {
-    imageViewer,
-  },
-  data() {
-    return {
-      timelineData: [],
-      currentImage: {},
-      dialogVisible: false,
-    };
-  },
-  computed: {
-    ...mapState([
-      'cdn',
-    ]),
-    i18nName() {
-      return this.$i18n.locale;
+    name: 'Memories',
+    data() {
+        return {
+            timelineData: [],
+            currentImage: {},
+            dialogVisible: false,
+        };
     },
-    imageDescribe() {
-      /* eslint-disable */
+    computed: {
+        ...mapState([
+            'cdn',
+        ]),
+        i18nName() {
+            return this.$i18n.locale;
+        },
+        imageDescribe() {
+            /* eslint-disable */
       const {
         name_Cn,
         name_En,
@@ -170,7 +175,6 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/theme.scss";
 
 .memories {
   flex-direction: column;

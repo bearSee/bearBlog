@@ -1,0 +1,75 @@
+{
+    "menus": [
+        {
+            "name": "首页",
+            "path": "/index",
+            "icon": "el-icon-s-home"
+        },
+        {
+            "name": "影集",
+            "path": "/memories",
+            "icon": "el-icon-camera-solid",
+            "children": []
+        },
+        {
+            "name": "日志",
+            "path": "/diaries",
+            "icon": "el-icon-s-order",
+            "children": []
+        },
+        {
+            "name": "我的",
+            "path": "/userCenter",
+            "icon": "el-icon-s-custom",
+            "children": []
+        }
+    ],
+    "menuTextColor": "#fff",
+    "backgroundImages": [
+        {
+            "name": "数学",
+            "url": "images/study-bg.jpg"
+        },
+        {
+            "name": "麦田",
+            "url": "images/catcher.jpg"
+        },
+        {
+            "name": "灯塔",
+            "url": "images/light-house.jpg"
+        },
+        {
+            "name": "落枫",
+            "url": "images/fall-maple-leaves.jpg"
+        },
+        {
+            "name": "麦圈A",
+            "url": "images/catcher-circle-A.jpg"
+        },
+        {
+            "name": "麦圈B",
+            "url": "images/catcher-circle-B.jpg"
+        },
+        {
+            "name": "麦穗",
+            "url": "images/catcher-grain.jpg"
+        }
+    ],
+    "backgroundImage": "images/catcher.jpg",
+    "backgroundColor": "#545c64",
+    "defaultThemeColor": "#1fdbc6",
+    "predefineColors": [
+        "#ff4500",
+        "#ff8c00",
+        "#ffd700",
+        "#90ee90",
+        "#00ced1",
+        "#1e90ff",
+        "#c71585",
+        "rgb(255, 120, 0)",
+        "hsv(51, 100, 98)"
+    ],
+    "avatar": "images/avatar.jpg",
+    "username": "奔跑的提款机",
+    "qr": "images/qr.jpg"
+}

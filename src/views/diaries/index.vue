@@ -17,8 +17,7 @@
         :key="col.code"
         :prop="col.code"
         :label="$t(col.label)"
-        :width="col.label">
-      </el-table-column>
+        :width="col.label" />
     </el-table>
     <el-dialog
       class="diaries-detali"
@@ -27,8 +26,13 @@
       :show-close="false"
       :close-on-press-escape="false"
       :visible.sync="detailVisible">
-      <el-page-header :title="i18nName === 'zh-CN' ? '返回' : 'Back'" @back="detailVisible = false" :content="detailTitle"></el-page-header>
-      <div class="detali-content vertical-scroll" v-html="detailContent"></div>
+      <el-page-header
+        :title="i18nName === 'zh-CN' ? '返回' : 'Back'"
+        @back="detailVisible = false"
+        :content="detailTitle" />
+      <div
+        class="detali-content vertical-scroll"
+        v-html="detailContent" />
     </el-dialog>
   </div>
 </template>
@@ -36,86 +40,85 @@
 <script>
 
 export default {
-  name: 'diaries',
-  data() {
-    return {
-      diarieTableCol: {
-        'zh-CN': [
-          {
-            label: '标题',
-            code: 'title_Cn',
-          },
-          {
-            label: '发表日期',
-            code: 'pubTime',
-          },
-          {
-            label: '阶段',
-            code: 'phase_Cn',
-          },
-          {
-            label: '作者',
-            code: 'author_Cn',
-          },
-        ],
-        'en-US': [
-          {
-            label: '标题',
-            code: 'title_En',
-          },
-          {
-            label: '发表日期',
-            code: 'pubTime',
-          },
-          {
-            label: '阶段',
-            code: 'phase_En',
-          },
-          {
-            label: '作者',
-            code: 'author_En',
-          },
-        ],
-      },
-      diarieData: [],
-      detailVisible: false,
-      detailData: {},
-    };
-  },
-  methods: {
-    getDiaries() {
-      this.$http.get('diaries/diarieLists.json').then(({ data }) => {
-        this.diarieData = data && data.list || [];
-      });
+    name: 'Diaries',
+    data() {
+        return {
+            diarieTableCol: {
+                'zh-CN': [
+                    {
+                        label: '标题',
+                        code: 'title_Cn',
+                    },
+                    {
+                        label: '发表日期',
+                        code: 'pubTime',
+                    },
+                    {
+                        label: '阶段',
+                        code: 'phase_Cn',
+                    },
+                    {
+                        label: '作者',
+                        code: 'author_Cn',
+                    },
+                ],
+                'en-US': [
+                    {
+                        label: '标题',
+                        code: 'title_En',
+                    },
+                    {
+                        label: '发表日期',
+                        code: 'pubTime',
+                    },
+                    {
+                        label: '阶段',
+                        code: 'phase_En',
+                    },
+                    {
+                        label: '作者',
+                        code: 'author_En',
+                    },
+                ],
+            },
+            diarieData: [],
+            detailVisible: false,
+            detailData: {},
+        };
     },
-    handlerRowClick({ fileName }) {
-      this.$http.get(`diaries/${fileName}`).then(({ data }) => {
-        this.detailVisible = true;
-        this.detailData = data || {};
-      });
+    methods: {
+        getDiaries() {
+            this.$http.get('diaries/diarieLists.json').then(({ data }) => {
+                this.diarieData = data && data.list || [];
+            });
+        },
+        handlerRowClick({ fileName }) {
+            this.$http.get(`diaries/${fileName}`).then(({ data }) => {
+                this.detailVisible = true;
+                this.detailData = data || {};
+            });
+        },
     },
-  },
-  computed: {
-    i18nName() {
-      return this.$i18n.locale;
+    computed: {
+        i18nName() {
+            return this.$i18n.locale;
+        },
+        detailTitle() {
+            const data = this.detailData[this.i18nName] || {};
+            return data.title || '';
+        },
+        detailContent() {
+            const data = this.detailData[this.i18nName] || {};
+            return data.content || '';
+        },
     },
-    detailTitle() {
-      const data = this.detailData[this.i18nName] || {};
-      return data.title || '';
+    created() {
+        this.getDiaries();
     },
-    detailContent() {
-      const data = this.detailData[this.i18nName] || {};
-      return data.content || '';
-    },
-  },
-  created() {
-    this.getDiaries();
-  },
 };
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/theme.scss";
 
 .diaries {
   padding: 20px;
